@@ -6,5 +6,4 @@ class Card(BaseModel):
     id : Optional[str]
     codigo : str
     posicion : str
-    coordenada : str
-    estado : str
+    estado : bool
