@@ -4,7 +4,6 @@ def cartaEntity(item)->dict:
         "id":str(item["_id"]),
         "codigo":item["codigo"],
         "posicion":item["posicion"],
-        "coordenada":item["coordenada"],
         "estado":item["estado"]
     }
 
