@@ -10,3 +10,15 @@ def cartaEntity(item)->dict:
 
 def cartasEntity(entity)-> list:
     return [cartaEntity(item) for item in entity]
+
+
+def usuarioEntity(item)->dict:
+    return {
+        "id":str(item["_id"]),
+        "name":item["codigo"],
+        "jugadas":item["posicion"],
+        "victorias":item["coordenada"],
+    }
+
+def usuariosEntity(entity)-> list:
+    return [usuariosEntity(item) for item in entity]
