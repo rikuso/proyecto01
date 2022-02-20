@@ -21,9 +21,9 @@ def create_user(user: Usuario):
     id = conn.yugioh.user.insert_one(new_carta).inserted_id
     user = conn.yugioh.user.find_one({"_id": id})
 
-    return cartaEntity(user)
+    return usuarioEntity(user)
 
-@user.post('/card')
+@user.post('/cards')
 def create_carta(user: Card):
     new_carta = dict(user)
 
@@ -42,9 +42,9 @@ def create_carta(user: Card):
 #===================================================
 @user.get('/users')
 def consultar_todas():
-    return cartasEntity(conn.yugioh.user.find())
+    return usuariosEntity(conn.yugioh.user.find())
 
-@user.get('/card')
+@user.get('/cards')
 def consultar_todas():
     return cartasEntity(conn.yugioh.card.find())
 
@@ -56,9 +56,9 @@ def consultar_todas():
 
 @user.get('/users/{id}')
 def consulta_una(id: str):
-    return cartaEntity(conn.yugioh.user.find_one({"_id": ObjectId(id)}))
+    return usuarioEntity(conn.yugioh.user.find_one({"_id": ObjectId(id)}))
 
-@user.get('/card/{id}')
+@user.get('/cards/{id}')
 def consulta_una(id: str):
     return cartaEntity(conn.yugioh.card.find_one({"_id": ObjectId(id)}))
 #=================================================
@@ -66,9 +66,9 @@ def consulta_una(id: str):
 #=================================================
 @user.get('/users/{name}')
 def consulta_una(name: str):
-    return cartaEntity(conn.yugioh.user.find_one({"name": name}))
+    return usuarioEntity(conn.yugioh.user.find_one({"name": name}))
 
-@user.get('/card/{codigo}')
+@user.get('/cards/{codigo}')
 def consulta_una(codigo: str):
     return cartaEntity(conn.yugioh.card.find_one({"codigo": codigo}))
 
@@ -77,13 +77,13 @@ def consulta_una(codigo: str):
 #METODO PARA EDITAR LA CARTA ID O CODIGO
 #================================================
 
-@user.put('/card/{id}')
+@user.put('/cards/{id}')
 def update_card(id: str, user: Card):
     conn.yugioh.card.find_one_and_update(
         {"_id": ObjectId(id)}, {"$set": dict(user)})
-    return cartaEntity(conn.yugioh.card.find_one({"_id": ObjectId(id)}))
+    return usuarioEntity(conn.yugioh.card.find_one({"_id": ObjectId(id)}))
 
-@user.put('/card/{codigo}')
+@user.put('/cards/{codigo}')
 def update_card(codigo: str, user: Card):
     conn.yugioh.card.find_one_and_update(
         {"codigo":codigo}, {"$set": dict(user)})
@@ -94,13 +94,13 @@ def update_card(codigo: str, user: Card):
 #METODO PARA ELIMINAR UNA CARTA CON CODIGO O ID
 #==============================================
 
-@user.delete('/card/{id}',status_code=status.HTTP_204_NO_CONTENT)
+@user.delete('/cards/{id}',status_code=status.HTTP_204_NO_CONTENT)
 def delete_card(id: str):
-    cartaEntity(conn.yugioh.card.find_one_and_delete({"_id": ObjectId(id)}))
+    usuarioEntity(conn.yugioh.card.find_one_and_delete({"_id": ObjectId(id)}))
 
     return Response(status_code=HTTP_204_NO_CONTENT)
 
-@user.delete('/card/{codigo}',status_code=status.HTTP_204_NO_CONTENT)
+@user.delete('/cards/{codigo}',status_code=status.HTTP_204_NO_CONTENT)
 def delete_card(codigo: str):
     cartaEntity(conn.yugioh.card.find_one_and_delete({"codigo":codigo}))
 
