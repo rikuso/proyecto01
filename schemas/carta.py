@@ -11,7 +11,6 @@ def cartaEntity(item)->dict:
 def cartasEntity(entity)-> list:
     return [cartaEntity(item) for item in entity]
 
-
 def usuarioEntity(item)->dict:
     return {
         "id":str(item["_id"]),
