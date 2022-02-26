@@ -48,9 +48,11 @@ def consulta_una(id: str):
 #               CODIGO O NOMBRE
 #=================================================
 
-@user.get('/cards/{codigo}')
+@user.get('/cards/cod/{codigo}')
 def consulta_una(codigo: str):
-    return cartaEntity(conn.yugioh.card.find_one({"codigo": codigo}))
+    cod = conn.yugioh.card.find_one({"codigo": codigo},{'_id':1,'codigo':codigo})
+    cod = cod['_id']
+    return cartaEntity(conn.yugioh.card.find_one({"_id": ObjectId(cod)}))
 
 # Editar una Carta o posicion
 #================================================
@@ -63,11 +65,13 @@ def update_card(id: str, user: Card):
         {"_id": ObjectId(id)}, {"$set": dict(user)})
     return cartaEntity(conn.yugioh.card.find_one({"_id": ObjectId(id)}))
 
-@user.put('/cards/{codigo}')
+@user.put('/cards/cod/{codigo}')
 def update_card(codigo: str, user: Card):
+    cod = conn.yugioh.card.find_one({"codigo": codigo},{'_id':1,'codigo':codigo})
+    cod = cod['_id']
     conn.yugioh.card.find_one_and_update(
-        {"codigo":codigo}, {"$set": dict(user)})
-    return cartaEntity(conn.yugioh.card.find_one({"codigo":codigo}))
+        {"_id": ObjectId(cod)}, {"$set": dict(user)})
+    return  cartaEntity(conn.yugioh.card.find_one({"_id": ObjectId(cod)}))
 
 # Eliminar una carta
 #==============================================
@@ -80,8 +84,16 @@ def delete_card(id: str):
 
     return Response(status_code=HTTP_204_NO_CONTENT)
 
-@user.delete('/cards/{codigo}',status_code=status.HTTP_204_NO_CONTENT)
+@user.delete('/cards/cod/{codigo}',status_code=status.HTTP_204_NO_CONTENT)
 def delete_card(codigo: str):
-    cartaEntity(conn.yugioh.card.find_one_and_delete({"codigo":codigo}))
+    cod = conn.yugioh.card.find_one({"codigo": codigo},{'_id':1,'codigo':codigo})
+    cod = cod['_id']
+    cartaEntity(conn.yugioh.card.find_one_and_delete({"_id": ObjectId(cod)}))
+
+    return Response(status_code=HTTP_204_NO_CONTENT)
+#ELIMINACION TOTAL DE LA BASE 
+@user.delete('/cards/del',status_code=status.HTTP_204_NO_CONTENT)
+def delete_card():
+    cartaEntity(conn.yugioh.card.drop())
 
     return Response(status_code=HTTP_204_NO_CONTENT)
